@@ -1,0 +1,62 @@
+body {
+    background: linear-gradient(100deg,rgb(1, 83, 224) 30%,rgb(254, 254, 254) 70%);
+    font-family: 'Arial', sans-serif;
+}
+
+/* การจัดการ Card ฟอร์ม */
+.card {
+    border-radius: 15px;
+    border: none;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* หัวข้อของฟอร์ม */
+h3, h4 {
+    font-weight: bold;
+    color: #007bff;
+}
+
+/* ปรับแต่ง Label */
+label {
+    font-weight: 600;
+}
+
+/* ปรับแต่ง input, select ให้ดูดีขึ้น */
+.form-control {
+    border-radius: 8px;
+    border: 1px solid #ced4da;
+    padding: 10px;
+    font-size: 16px;
+}
+
+/* ปุ่มลงทะเบียน */
+.btn-success {
+    background-color: #28a745;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+/* ปรับแต่ง Modal */
+.modal-content {
+    border-radius: 10px;
+}
+
+.modal-header {
+    background-color: #007bff;
+    color: white;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.modal-footer {
+    border-top: none;
+}
+
+/* ปุ่มยอมรับเงื่อนไข */
+#acceptTerms {
+    font-size: 16px;
+    font-weight: bold;
+    padding: 10px 20px;
+}
