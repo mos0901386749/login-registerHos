@@ -62,7 +62,7 @@ $this->title = 'ลงทะเบียน';
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ยกเลิก</button>
-                <button type="button" class="btn btn-primary" id="confirmButton" disabled>ตกลง</button>
+                <button type="button" class="btn btn-success" id="confirmButton" disabled>ตกลง</button>
             </div>
         </div>
     </div>
@@ -89,58 +89,88 @@ $this->title = 'ลงทะเบียน';
     });
 
 
-    $(document).ready(function () {
-    $("#confirmButton").click(function () {
-        var email = "narongrit0901386749@gmail.com"; // เปลี่ยนเป็นอีเมลที่ต้องการตรวจสอบ
+    $(document).ready(function() {
+        $("#confirmButton").click(function() {
+            var email = "narongrit0901386749@gmail.com"; // เปลี่ยนเป็นอีเมลที่ต้องการตรวจสอบ
 
-        $.ajax({
-            url: "https://127.0.0.1/x-ray/web/auth/check-email",
-            type: "POST",
-            data: { email: email },
-            dataType: "json",
-            success: function (response) {
-                if (response.success) {
-                    // ปิด Modal
-                    $("#registrationModal").modal("hide");
+            $.ajax({
+                url: "https://127.0.0.1/x-ray/web/auth/check-email",
+                type: "POST",
+                data: {
+                    email: email
+                },
+                dataType: "json",
+                success: function(response) {
+                    if (response.success) {
+                        // ปิด Modal
+                        $("#registrationModal").modal("hide");
 
-                    // ใช้ SweetAlert2 แทน alert
-                    Swal.fire({
-                        title: 'สมัครสมาชิกเสร็จสิ้น!',
-                        text: 'ท่านสามารถเข้าใช้งานระบบอินเทอร์เน็ตได้แล้ว',
-                        icon: 'success',
-                        confirmButtonText: 'ตกลง',
-                        confirmButtonColor: '#3085d6',
-                        background: '#fff',
-                        timer: 3000
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            // ซ่อน <h3> เดิม
-                            $(".right-panel h3").hide();
+                        // ใช้ SweetAlert2 แทน alert
+                        Swal.fire({
+                            title: 'สมัครสมาชิกเสร็จสิ้น!',
+                            text: 'ท่านสามารถเข้าใช้งานระบบอินเทอร์เน็ตได้แล้ว',
+                            icon: 'success',
+                            confirmButtonText: 'ตกลง',
+                            confirmButtonColor: '#3085d6',
+                            background: '#fff',
+                            timer: 3000
+                        }).then((result) => {
+                            if (result.isConfirmed || result.dismiss === Swal.DismissReason.timer) {
+                                // ปิด modal และลบ backdrop ถ้ามี
+                                $("#registrationModal").modal("hide"); // ปิด modal
+                                $(".modal-backdrop").remove(); // ลบ backdrop ที่ Bootstrap สร้างขึ้น
+                                $("body").removeClass("modal-open"); // แก้ไขปัญหาที่ทำให้คลิกไม่ได้
 
-                            // ล้างข้อมูลเดิม (ป้องกันซ้อนกัน)
-                            $(".right-panel .user-info").remove();
+                                // ซ่อน <h3> เดิม
+                                $(".right-panel h3").hide();
 
-                            // แสดงข้อมูลใหม่ (ชื่อ + ตำแหน่ง)
-                            $(".right-panel").append(`
-                                <div class="user-info">
-                                    <p class="fs-5">ชื่อ: ${response.data.name_th}</p>
-                                    <p class="fs-5">ตำแหน่ง: ${response.data.position_1}</p>
-                                </div>
-                            `);
-                            
-                        }
-                    });
-                } else {
-                    alert(response.message);
+                                // ล้างข้อมูลเดิม (ป้องกันซ้อนกัน)
+                                $(".right-panel .user-info").remove();
+
+                                // แสดงข้อมูลใหม่ (ชื่อ + ตำแหน่ง)
+                                $(".right-panel").append(`
+            <div class="user-info">
+                <p class="fs-5">ชื่อ: ${response.data.name_th}</p>
+                <p class="fs-5">ตำแหน่ง: ${response.data.position_1}</p>
+            </div>
+        `);
+
+                                // ซ่อนปุ่ม "สมัครและใช้งาน Internet โรงพยาบาล ผ่านProviderID"
+                                $(".login-btn").hide();
+
+                                // เพิ่มปุ่ม "เข้าสู่ระบบ"
+                                $(".right-panel").append(`
+            <button class="btn btn-success mt-3 login-button">
+                เข้าสู่ระบบ
+            </button>
+        `);
+                            }
+                        });
+
+
+                    } else {
+                        alert(response.message);
+                    }
+                },
+                error: function() {
+                    alert("เกิดข้อผิดพลาดในการเชื่อมต่อกับระบบ");
                 }
-            },
-            error: function () {
-                alert("เกิดข้อผิดพลาดในการเชื่อมต่อกับระบบ");
-            }
+            });
         });
     });
-});
 
+    $(document).on("click", ".login-button", function() {
+        // แสดง SweetAlert2 วงกลมหมุน
+        Swal.fire({
+            title: 'กำลังเข้าสู่ระบบ...',
+            html: '<div class="spinner-border text-success" role="status"><span class="visually-hidden">Loading...</span></div>',
+            allowOutsideClick: false,
+            showConfirmButton: false
+        });
 
-
+        // ตั้งเวลา 5 วินาทีแล้วเปลี่ยนหน้า
+        setTimeout(() => {
+            window.location.href = "https://somdej17.moph.go.th/?"; // เปลี่ยน URL ตามต้องการ
+        }, 5000);
+    });
 </script>

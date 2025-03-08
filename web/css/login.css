@@ -1,5 +1,6 @@
 body {
-    background: linear-gradient(100deg,rgb(1, 83, 224),rgb(254, 254, 254));
+    /* background: linear-gradient(100deg,rgb(1, 83, 224),rgb(254, 254, 254)); */
+    background: rgb(0, 78, 213);
     height: 100vh;
     display: flex;
     align-items: center;
