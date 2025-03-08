@@ -9,27 +9,35 @@ use yii\web\Response;
 use yii\filters\VerbFilter;
 
 use app\models\LoginForm;
+use app\models\UserDataProviderid; //
 use app\models\RegisterForm;
 
 use app\models\ContactForm;
 
 class SiteController extends Controller
 {
-     // Register
-     public function actionRegister()
-     {
-         $model = new RegisterForm();
-         
-         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-             // บันทึกข้อมูลลงฐานข้อมูล (ถ้ามี)
-             Yii::$app->session->setFlash('success', 'ลงทะเบียนสำเร็จ!');
-             return $this->refresh();
-         }
- 
-         return $this->render('register', [
-             'model' => $model,
-         ]);
-     }
+    public function actionRegister()
+    {
+        // ดึงข้อมูลจากฐานข้อมูล
+        $model = RegisterForm::find()->where(['email' => 'narongrit0901386749@gmail.com'])->one();
+
+        if (!$model) {
+            $model = new RegisterForm(); // ถ้าไม่มีข้อมูล ให้สร้างโมเดลเปล่า
+        }
+
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            if ($model->save()) {
+                Yii::$app->session->setFlash('success', 'ลงทะเบียนสำเร็จ!');
+                return $this->refresh();
+            } else {
+                Yii::$app->session->setFlash('error', 'เกิดข้อผิดพลาดในการบันทึกข้อมูล');
+            }
+        }
+
+        return $this->render('register', [
+            'model' => $model,
+        ]);
+    }
 
 
     /**
@@ -91,20 +99,24 @@ class SiteController extends Controller
      */
     public function actionLogin()
     {
-        if (!Yii::$app->user->isGuest) {
-            return $this->goHome();
+        $email = Yii::$app->request->post('email');
+
+        if ($email) {
+            // ค้นหาอีเมลในฐานข้อมูล
+            $user = UserDataProviderid::findOne(['email' => $email]);
+
+            if ($user) {
+                // ถ้าพบผู้ใช้ ให้เข้าสู่ระบบและ redirect ไปหน้า register.php
+                Yii::$app->session->set('user', $user->toArray()); // เก็บข้อมูลผู้ใช้ใน session
+                return $this->redirect(['site/register']);
+            } else {
+                Yii::$app->session->setFlash('error', 'ไม่พบอีเมลนี้ในระบบ');
+            }
         }
 
-        $model = new LoginForm();
-        if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->goBack();
-        }
-
-        $model->password = '';
-        return $this->render('login', [
-            'model' => $model,
-        ]);
+        return $this->render('login');
     }
+
 
     /**
      * Logout action.

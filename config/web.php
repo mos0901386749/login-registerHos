@@ -48,6 +48,7 @@ $config = [
             'showScriptName' => false,
             'rules' => [
                 'register' => 'site/register',
+                
             ],
         ],
         

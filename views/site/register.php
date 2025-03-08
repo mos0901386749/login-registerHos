@@ -1,4 +1,5 @@
 <?php
+
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
@@ -10,32 +11,33 @@ $this->title = 'ลงทะเบียน';
 
 <!-- Modal ยอมรับข้อตกลง -->
 <div class="modal fade" id="termsModal" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">ข้อตกลงและเงื่อนไขการใช้บริการ</h5>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">ข้อตกลงและเงื่อนไขการใช้บริการ</h5>
+            </div>
+            <div class="modal-body">
+                <p>โปรดอ่านและยอมรับข้อตกลงก่อนดำเนินการลงทะเบียน</p>
+                <ul>
+                    <li>ข้อมูลที่กรอกต้องเป็นความจริง</li>
+                    <li>ระบบจะใช้ข้อมูลนี้สำหรับการเข้าใช้งานอินเทอร์เน็ต</li>
+                    <li>ห้ามนำบัญชีไปใช้ในทางที่ผิดกฎหมาย</li>
+                </ul>
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" id="agreeTerms">
+                    <label class="form-check-label" for="agreeTerms">ฉันยอมรับข้อตกลง</label>
                 </div>
-                <div class="modal-body">
-                    <p>โปรดอ่านและยอมรับข้อตกลงก่อนดำเนินการลงทะเบียน</p>
-                    <ul>
-                        <li>ข้อมูลที่กรอกต้องเป็นความจริง</li>
-                        <li>ระบบจะใช้ข้อมูลนี้สำหรับการเข้าใช้งานอินเทอร์เน็ต</li>
-                        <li>ห้ามนำบัญชีไปใช้ในทางที่ผิดกฎหมาย</li>
-                    </ul>
-                    <div class="form-check">
-                        <input type="checkbox" class="form-check-input" id="agreeTerms">
-                        <label class="form-check-label" for="agreeTerms">ฉันยอมรับข้อตกลง</label>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" id="acceptTerms" disabled>ดำเนินการต่อ</button>
-                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="acceptTerms" disabled>ดำเนินการต่อ</button>
             </div>
         </div>
     </div>
+</div>
 
 
-    
+
+
 <div id="registrationContainer" class="container mt-5" style="display: none;">
 
 
@@ -43,60 +45,44 @@ $this->title = 'ลงทะเบียน';
     <div class="row justify-content-center">
         <div class="col-lg-8">
             <div class="card shadow p-4">
-                <h3 class="text-center">กรุณากรอกข้อมูลให้ครบถ้วน เพื่อลงทะเบียน</h3><br>
+                <h3 class="text-center">กรุณากรอกเช็คข้อมูลให้ถูกต้อง</h3><br>
                 <?php $form = ActiveForm::begin(); ?>
 
                 <h4>ข้อมูลส่วนบุคคล</h4><br>
                 <div class="row">
                     <div class="col-md-6">
-                        <?= $form->field($model, 'prefix_th')->dropDownList(['นาย' => 'นาย', 'นาง' => 'นาง'], ['prompt' => 'เลือกคำนำหน้า']) ?>
+                        <?= $form->field($model, 'title_th')->textInput(['readOnly' => true]) ?>
                     </div>
                     <div class="col-md-6">
-                        <?= $form->field($model, 'prefix_en')->dropDownList(['Mr.' => 'Mr.', 'Mrs.' => 'Mrs.'], ['prompt' => 'เลือกคำนำหน้า']) ?>
+                        <?= $form->field($model, 'title_en')->textInput(['readOnly' => true]) ?>
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-md-6">
-                        <?= $form->field($model, 'first_name')->textInput(['placeholder' => 'ชื่อ']) ?>
+                        <?= $form->field($model, 'firstname_th')->textInput(['readOnly' => true]) ?>
                     </div>
                     <div class="col-md-6">
-                        <?= $form->field($model, 'last_name')->textInput(['placeholder' => 'นามสกุล']) ?>
+                        <?= $form->field($model, 'lastname_th')->textInput(['readOnly' => true]) ?>
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-md-6">
-                        <?= $form->field($model, 'citizen_id')->textInput(['placeholder' => 'เลขบัตรประชาชน']) ?>
+                        <?= $form->field($model, 'provider_id')->textInput(['readOnly' => true]) ?>
                     </div>
                     <div class="col-md-6">
-                        <?= $form->field($model, 'birth_date')->input('date') ?>
+                        <?= $form->field($model, 'date_of_birth')->textInput(['readOnly' => true]) ?>
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-md-6">
-                        <?= $form->field($model, 'email')->input('email', ['placeholder' => 'อีเมล']) ?>
-                    </div>
-                    <div class="col-md-6">
-                        <?= $form->field($model, 'phone')->textInput(['placeholder' => 'เบอร์โทร']) ?>
+                        <?= $form->field($model, 'email')->textInput(['readOnly' => true]) ?>
                     </div>
                 </div>
 
-                <br>
-                <h4>ข้อมูลสังกัด</h4>
-                <br>
-                <div class="row">
-                    <div class="col-md-4">
-                        <?= $form->field($model, 'affiliation')->textInput(['affiliation' => 'ตำแหน่ง/วิชาชีพ']) ?>
-                    </div>
-                    <div class="col-md-4">
-                        <?= $form->field($model, 'position')->textInput(['position' => 'ตำแหน่ง/วิชาชีพ']) ?>
-                    </div>
-                    <div class="col-md-4">
-                        <?= $form->field($model, 'type')->textInput(['type' => 'ประเภท']) ?>
-                    </div>
-                </div>
+
 
                 <div class="row mt-4">
                     <div class="col text-center">
@@ -131,4 +117,3 @@ $(document).ready(function() {
 JS;
 $this->registerJs($script);
 ?>
-

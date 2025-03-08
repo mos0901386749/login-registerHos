@@ -2,47 +2,37 @@
 
 namespace app\models;
 
-use yii\base\Model;
+use Yii;
+use yii\db\ActiveRecord;
 
-class RegisterForm extends Model
+class RegisterForm extends ActiveRecord
 {
-    public $prefix_th;
-    public $prefix_en;
-    public $first_name;
-    public $last_name;
-    public $citizen_id;
-    public $birth_date;
-    public $email;
-    public $phone;
-    public $affiliation;
-    public $position;
-    public $type;
+    public static function tableName()
+    {
+        return 'user_data_providerid'; // เชื่อมกับตารางจริงในฐานข้อมูล
+    }
 
     public function rules()
     {
         return [
-            [['prefix_th', 'prefix_en', 'first_name', 'last_name', 'citizen_id', 'birth_date', 'email', 'phone'], 'required'],
-            [['first_name', 'last_name'], 'string', 'max' => 50],
+            [['title_th', 'title_en', 'firstname_th', 'lastname_th', 'provider_id', 'date_of_birth', 'email'], 'required'],
+            [['firstname_th', 'lastname_th'], 'string', 'max' => 50],
             [['email'], 'email'],
-            [['phone'], 'string', 'max' => 10],
-            [['citizen_id'], 'string', 'length' => 13],
+            [['provider_id'], 'string', 'length' => 13],
         ];
     }
 
     public function attributeLabels()
     {
         return [
-            'prefix_th' => 'คำนำหน้า (ไทย)',
-            'prefix_en' => 'คำนำหน้า (อังกฤษ)',
-            'first_name' => 'ชื่อ',
-            'last_name' => 'นามสกุล',
-            'citizen_id' => 'เลขบัตรประชาชน',
-            'birth_date' => 'วัน/เดือน/ปีเกิด',
+            'title_th' => 'คำนำหน้า (ไทย)',
+            'title_en' => 'คำนำหน้า (อังกฤษ)',
+            'firstname_th' => 'ชื่อ',
+            'lastname_th' => 'นามสกุล',
+            'provider_id' => 'เลขบัตรประชาชน',
+            'date_of_birth' => 'วัน/เดือน/ปีเกิด',
             'email' => 'อีเมล',
-            'phone' => 'เบอร์โทร',
-            'affiliation' => 'สังกัด',
-            'position' => 'ตำแหน่ง/วิชาชีพ',
-            'type' => 'ประเภท',
         ];
     }
 }
+

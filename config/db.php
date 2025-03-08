@@ -2,9 +2,9 @@
 
 return [
     'class' => 'yii\db\Connection',
-    'dsn' => 'mysql:host=localhost;dbname=x_ray',
-    'username' => 'root',
-    'password' => '',
+    'dsn' => 'mysql:host=192.168.200.9;dbname=radius_db',
+    'username' => 'mosmos12',
+    'password' => 'mos0901386749',
     'charset' => 'utf8',
 
     // Schema cache options (for production environment)
